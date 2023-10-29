@@ -1,0 +1,63 @@
+UTF-8 编码格式；请关闭自动换行并且尽可能扩大查看器窗口以获得最佳阅读体验
+
+
+
+
+一、简介
+本文件是7zADV的源代码文件说明，来自3-5105
+7zADV是一个将7-zip(23.01版本，于2023-10-28)的单文件命令行版本(一般文件名为7za.exe)转化为DLL(动态链接库格式)的工程
+此处的7-zip指的是由伊戈尔·巴普洛夫(Igor Pavlov,RU)创建的一款拥有极高压缩比的开源压缩软件
+
+7-zip简体中文官网
+https://sparanoid.com/lab/7z/
+
+7-zip英文官网
+https://7-zip.org/
+
+编译器为vc++6.0
+
+
+
+二、重要文件目录说明:
+([.]代表当前目录，[..]代表上一级目录，[*]表示通配符)
+
+.\*\Asm					汇编源代码
+
+.\*\C					C语言源代码
+
+.\*\CPP					C++源代码
+
+.\Alone					工程名称：Alone，生成7zan.exe，原7-zip的单文件命令行工程
+					只需要该文件就可以通过命令行使用7-zip所有核心功能，这是未修改的原版本
+					.\Alone\CPP\7zip\Bundles\Alone是工程主文件夹
+
+.\7zADV_MiniChange			工程名称：7zADV_MiniChange，生成7zADV.dll，对于Alone工程的最小化修改，使得其变为动态链接库
+					相对于Alone工程只修改了Main.cpp和MainAr.cpp并且详细标注了修改内容
+					API说明：
+					main(char* cmdLine)
+					cmdLine:7zan.exe的命令行参数
+					命令行参数具体参见参数说明(中文).txt或者Parameter description(English).txt
+					这个动态链接库有一个导出函数main，它接受一个指向字符串的char *指针并且处理它
+					此工程处理该字符串的方式与Alone工程相同，所以其内容即为7zan.exe的命令行参数
+					.\7zADV_MiniChange\CPP\7zip\Bundles\7zADV_MiniChange是工程主文件夹
+
+.\7zADV_Complete			工程名称：7zADV_Complete，生成7zADV.dll，在7zADV_MiniChange工程的基础上再做修改
+					针对dll做优化，主要删除了输出至屏幕的代码，减小体积并加快了速度
+					使用方式与7zADV_MiniChange工程相同
+					在需要发行的软件中使用应该使用该工程而非7zADV_MiniChange工程
+					.\7zADV_Complete\CPP\7zip\Bundles\7zADV_Complete是工程主文件夹
+
+.\Demo(3_5105)				C++示例调用
+
+.\Shell					加壳工具
+
+
+
+
+
+三、其他
+此工程基于伊戈尔·巴普洛夫(RU)的7-zip
+新人上路，欢迎任何有价值的建议和批评
+英文版本为机翻，可能与原意有冲突，以简体中文版本为准
+此前，已经有类似本工程的工程发出，例如秋田淰(JP)的7-zip32.dll，比本工程更完善
+但是由于未能找到其2010年之后的更新，无法使用多线程等新版特性，故制作了本工程
